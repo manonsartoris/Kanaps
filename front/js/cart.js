@@ -122,7 +122,7 @@ function renderProduct(kanap, color, quantity){
 
 }
 
-function totalQuantity (){
+/*function totalQuantity (){
     const totalQuantity = document.getElementById('totalQuantity');
     const sum = 0
     cart = JSON.parse(cart);
@@ -134,4 +134,4 @@ function totalQuantity (){
 
         }
     }
-}
+}*/
