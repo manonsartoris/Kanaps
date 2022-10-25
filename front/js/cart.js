@@ -3,23 +3,37 @@ const cart = JSON.parse(localStorage.getItem('cart'));
 
 if (cart !== null){
 
+    var productIds = []
+    for(let i =0; i< cart.length ; i++){
+        if(!productIds.includes(cart[i].id)){
+            productIds.push(cart[i].id)
+        }
+    }
 
-    for(let i = 0; i < cart.length; i++) {
-        fetch('http://localhost:3000/api/products/' + cart[i].id)
+    var promises = []
+    for(let i = 0; i < productIds.length; i++) {
+        promises.push( fetch('http://localhost:3000/api/products/' + productIds[i])
         .then(response => {
             
             return response.json();
           
-        })
-        .then(kanap => {
+        }))
+    }
 
+    Promise.all(promises).then(kanaps => {
+        for(let i = 0; i < cart.length; i++){
+            for( let j =0 ; j < kanaps.length; j++){
+                if (kanaps[j]._id == cart[i].id){
+                    var kanap = kanaps[j]
+                }
+            }
+            
             const color = cart[i].color;
             const quantity = cart[i].quantity;
             renderProduct(kanap, color, quantity);
-           
-
-        })
-    }
+            
+        }
+    })
 }
 
 
@@ -104,34 +118,77 @@ function renderProduct(kanap, color, quantity){
                         // DETELE
                         const pDeleteKanap = document.createElement('p');
                         pDeleteKanap.classList.add('deleteItem');
+                        pDeleteKanap.dataset.id = kanap._id;
+                        pDeleteKanap.dataset.color = color;
                         pDeleteKanap.innerText = 'Supprimer';
+
+                        // Dans LocalStorage : suppression de l'article sélectionné    PAUSE //
+                        pDeleteKanap.addEventListener('click', element => {
+
+                            function deleteItemSelect(element, cart) {
+ 
+                                cart.splice(element, 1);
+                                localStorage.setItem('cart', JSON.stringify(cart));
+                            
+                            }
+                            deleteItemSelect(element, cart);
+                        });
+
                         divDeleteKanap.appendChild(pDeleteKanap)
 
-                      
-
-    // QUANTITE TOTAL
-    /* addition de chaque quantité */
 
 
-    // PRIX TOTAL
+                            // Prix total 
+                               // Prix total 
+                        
+                               let totalPrice = document.getElementById('totalPrice');
+                            
+                               const total = [kanap.price * quantity];
+        
+                               console.log(total);
+        
+        
+                               totalPrice.innerText = total;
 
-    // ERROR 
+                            
+                            // je reuni tout les prix dans un tableau
+
+                            // j'effectue la somme de chaque resultat
+                            // j'affiffe dans totalPrice le resultat
+                            
+
+                            console.log(total);
 
 
+                            totalPrice.innerText = total;
+                   
 
 
+                            // Quantité total
+
+                            let totalQuantity = document.getElementById('totalQuantity');
+
+                            let totalQte = quantity;
+
+                            totalQuantity.innerText = totalQte;
+
+                        
 }
+                    
 
-/*function totalQuantity (){
-    const totalQuantity = document.getElementById('totalQuantity');
-    const sum = 0
-    cart = JSON.parse(cart);
+                                                
 
-    for (let i = 0 ; i < cart.length ; i++){
-        if (cart[i].quantity !== 0){
-            cart[i].quantity += parseInt(quantity);
-            localStorage.setItem('cart', JSON.stringify(cart));
 
-        }
-    }
-}*/
+
+
+
+
+/* ajout quantité
+
+si la quantité est modifier, 
+alors on remplace la quantité par la nouvelle valeur
+
+*/
+
+
+
