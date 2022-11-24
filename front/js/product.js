@@ -58,12 +58,17 @@ addToCart.addEventListener('click', event => {
         quantity : Number(quantity)
     }
 
-    // Si le panier est vide
+    // Si la quantité = 0
+    if (data.quantity === 0){
+        alert('Veuillez saisir une quantité compris entre 1 et 100')
+    } else if (cart === null){
 
-    if (cart === null){
+        // Si le panier est vide
+
         let cart = [];
         cart.push(data);
         localStorage.setItem('cart', JSON.stringify(cart));
+        
     } else {
 
         // Si le panier contient un article de même id et de même couleur
