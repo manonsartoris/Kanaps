@@ -254,7 +254,7 @@ function form(){
 
     if(emailValid.test(email)){
         for (let j = 0 ; j < valueValid.length; j++){
-            if(stringValid.test(valueValid[i])){
+            if(stringValid.test(valueValid[j])){
                 isValid = true
             } else {
                 isValid = false
@@ -263,6 +263,8 @@ function form(){
     } else {
         isValid = false
     }
+
+    console.log(isValid)
 
     /* Données de contact du formulaire */
 
@@ -275,36 +277,41 @@ function form(){
           city: city,
           email: email
         },
-        products: [productIds]
+        products: productIds
     }
 
 console.log(data)
 
-    
-
+    if(isValid == true && cart != null){
+        orderId()
+    } else {
+        alert('votre panier est vide !')
+    }
 
 }    
-    async function orderId(){
-        let response = await fetch('http://localhost:3000/api/products/order', {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(data)
-        });
 
-        alert(response);
-    }
 // ------  COMMANDER  ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+function orderId(){
+    fetch('http://localhost:3000/api/products/order', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+            },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
 
-    const submitOrder = document.getElementById('order')
-    submitOrder.addEventListener('click', event => {
-        event.preventDefault()
-            form()
-            orderId()
-        
-        //envoie dans la page confirmation
+        window.location = 'confirmation.html?orderId=' + result.orderId;
+        localStorage.removeItem('cart');
 
     })
+}
+
+const submitOrder = document.getElementById('order')
+submitOrder.addEventListener('click', event => {
+    event.preventDefault()
+        form()
+})
 

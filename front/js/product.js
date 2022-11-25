@@ -59,16 +59,14 @@ addToCart.addEventListener('click', event => {
     }
 
     // Si la quantité = 0
-    if (data.quantity === 0){
-        alert('Veuillez saisir une quantité compris entre 1 et 100')
-    } else if (cart === null){
-
+    if (data.quantity !== 0 && data.color !== '' && data.quantity <= 100){
+      if (cart === null){
+        console.log(data.color)
         // Si le panier est vide
 
         let cart = [];
         cart.push(data);
         localStorage.setItem('cart', JSON.stringify(cart));
-        
     } else {
 
         // Si le panier contient un article de même id et de même couleur
@@ -89,9 +87,18 @@ addToCart.addEventListener('click', event => {
         }
 
         localStorage.setItem('cart', JSON.stringify(cart));
-    }
-   
- });
 
+    }} else {
+        if (data.quantity === 0 && data.color === ''){
+            alert("Veuillez choisir la couleur et la quantité du produit")
+        } else if (data.color === ''){
+            alert("Veuillez choisir la couleur du produit")
+        } else if (data.quantity === 0){
+            alert("Veuillez choisir la quantité du produit")
+        } else if (data.quantity >= 100){
+            alert("Veuillez choisir une quantité compris entre 1 et 100")
+        }
+ };
+})
  
 
